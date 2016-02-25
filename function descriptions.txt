@@ -8,9 +8,9 @@ if everything is initialized correctly we should be able to interface from the k
 
 
 
-char scanKeypad(void) 	
+char scanKeypad(void) 	 
 
-This functin is used to determine what button is pressed. from the ISR we know that at least one 
+This function is used to determine what button is pressed. from the ISR we know that at least one 
 button has been pressed. When we come into this we will scan each row with the odc in thier configuration.
 
 This functin returns a char "key" which is set to the character that was pressed. We will then pass that character
