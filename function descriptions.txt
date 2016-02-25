@@ -1,0 +1,44 @@
+part 1 functions
+
+void initKeypad()
+
+there will be 3 columns and 4 rows. rows are odc and columns are inputs with pull up resistors.
+This function serves to initialize all of that. It wont return anything. At the end of the day 
+if everything is initialized correctly we should be able to interface from the keypad
+
+
+
+char scanKeypad(void) 	
+
+This functin is used to determine what button is pressed. from the ISR we know that at least one 
+button has been pressed. When we come into this we will scan each row with the odc in thier configuration.
+
+This functin returns a char "key" which is set to the character that was pressed. We will then pass that character
+to the print char function from last lab in the LCD component. If more than one button is pressed "key" is set to -1
+indicating that we dont have a valid button press and therefore should not print
+
+
+
+
+
+
+Part 2 functions
+
+int validatepw(some pointer..)		
+
+this function shoud take a string in most likely in the form of a pointer. the goal of this function is to 
+determine if a string passed in it is a good password. Requirements for the password are that it is 4 characters
+long and that it does not contain "*" or "#". I would also imagine that we should check it against our "database" 
+to see if that current password already exists. If it does exist the new password should be rejected.
+
+If the password meets all of the criteara than a valid flag should be raised indicating that the password is valid.
+
+
+int database(pointer)
+
+we will get into this function if the valid flag was raised above. This function will serve two purposes. Its first is that if we have a 
+valid password we should store it in an array.
+
+Its second use will be if a user is entering an existing password we need to check it against the existing array of passwords. If it is an
+existing password a "goodPassword" flag should be raised. If it is a non existing password then the good flag will be down. Depending on the status
+of the flag the logic in main will display the right message to the LCD
