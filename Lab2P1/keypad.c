@@ -14,7 +14,6 @@
 #define OUTPUT 0
 #define INPUT 1
 #define ENABLE 1
-
 #define OPEN 1              //check if these are right..
 #define CLOSED 0
 
@@ -26,26 +25,24 @@
 #define CN2 CNENFbits.CNIEF1
 #define CN3 CNENDbits.CNIED12
 
-#define ROW1 PORTGbits.RG1 //RD11   
-#define ROW2 PORTFbits.RF0 //RC14  
-#define ROW3 PORTDbits.RD13// RC2 
-#define ROW4 PORTDbits.RD7 //RC4   
+#define ROW1 PORTGbits.RG1
+#define ROW2 PORTFbits.RF0
+#define ROW3 PORTDbits.RD13
+#define ROW4 PORTDbits.RD7
 
 #define PULLUP1 CNPUGbits.CNPUG0
 #define PULLUP2 CNPUFbits.CNPUF1
 #define PULLUP3 CNPUDbits.CNPUD12
 
-#define ODC1 ODCDbits.ODCD11
-#define ODC2 ODCCbits.ODCC14
-#define ODC3 ODCCbits.ODCC2
-#define ODC4 ODCCbits.ODCC4
+#define ODC1 ODCGbits.ODCG1
+#define ODC2 ODCFbits.ODCF0
+#define ODC3 ODCDbits.ODCD13
+#define ODC4 ODCDbits.ODCD7
 
 #define LATODC1 LATGbits.LATG1
 #define LATODC2 LATFbits.LATF0
 #define LATODC3 LATDbits.LATD13
 #define LATODC4 LATDbits.LATD7
-
-
 
 /* Initialize the rows as ODC outputs and the columns as inputs with pull-up
  * resistors. Don't forget about other considerations...
@@ -58,7 +55,7 @@ void initKeypad(void){
     PULLUP1 = ENABLE;       //enable pull up resistors
     PULLUP2 = ENABLE;
     PULLUP3 = ENABLE;
-    
+
     CN1=ENABLE;
     CN2=ENABLE;
     CN3=ENABLE;
@@ -74,7 +71,23 @@ void initKeypad(void){
     IEC1bits.CNDIE=1;
     IEC1bits.CNFIE=1;
     IEC1bits.CNGIE=1;
+
+    CN1=ENABLE;
+    CN2=ENABLE;
+    CN3=ENABLE;
     
+    CNCONDbits.ON=1;
+    CNCONFbits.ON=1;
+    CNCONGbits.ON=1;
+    
+    IFS1bits.CNDIF=0;
+    IFS1bits.CNFIF=0;
+    IFS1bits.CNGIF=0;
+    
+    IEC1bits.CNDIE=1;
+    IEC1bits.CNFIE=1;
+    IEC1bits.CNGIE=1;
+
     IPC8bits.CNIP=7;
     
     
@@ -100,7 +113,7 @@ void initKeypad(void){
  */
 char scanKeypad(void){      //close 1 open the rest
     char key = -1;
-    
+
     while(1){
         LATODC1=CLOSED;
         LATODC2=OPEN;
@@ -176,7 +189,6 @@ char scanKeypad(void){      //close 1 open the rest
             break;
         }
     }
-    
     return key;
 }
 
