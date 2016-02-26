@@ -199,6 +199,7 @@ void moveCursorLCD(unsigned char x, unsigned char y)
         else if(x==15)c=0b11001110;
         else if(x==16)c=0b11001111;
     }
+    
     writeLCD(c,0,40);
 }
 

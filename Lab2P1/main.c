@@ -26,20 +26,31 @@ int main(void){
     initLCD();
     initKeypad();
 
-   
-    
+    int pressCount = 0;
+    moveCursorLCD(1,1);
     while(1){
         
+        
         if(keypadFlag == 1){
+            
             CN1 = OFF;
             CN2 = OFF;
             CN3 = OFF;
+            pressCount++;
             keypadFlag = 0;
             keystroke = scanKeypad();
             
             if(keystroke != -1){
-                printCharLCD(keystroke);    
+                if(pressCount == 16){
+                    moveCursorLCD(1,2);
+                }
+                else if(pressCount == 32){
+                    moveCursorLCD(1,1);
+                    pressCount = 0;
+                }
             }
+                printCharLCD(keystroke);    
+            
             CN1 = ON;
             CN2 = ON;
             CN3 = ON;
