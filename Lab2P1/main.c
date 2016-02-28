@@ -26,18 +26,17 @@ int main(void){
     initLCD();
     initKeypad();
 
-    int pressCount = 0;
+    int pressCount = -1;
     moveCursorLCD(1,1);
     while(1){
-        
-        
         if(keypadFlag == 1){
-            
             CN1 = OFF;
             CN2 = OFF;
             CN3 = OFF;
-            pressCount++;
+            delayMs(50);
             keypadFlag = 0;
+            pressCount++;
+            
             keystroke = scanKeypad();
             
             if(keystroke != -1){
@@ -48,9 +47,9 @@ int main(void){
                     moveCursorLCD(1,1);
                     pressCount = 0;
                 }
+                printCharLCD(keystroke);
+                keystroke=-1;
             }
-                printCharLCD(keystroke);    
-            
             CN1 = ON;
             CN2 = ON;
             CN3 = ON;
@@ -60,13 +59,18 @@ int main(void){
 
 void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
     
-    PORTD;
-    PORTF;
-    PORTG;
+    if(IFS1bits.CNDIF==1){
+        PORTD;
+        IFS1bits.CNDIF=0;
+    }
+    else if(IFS1bits.CNFIF==1){
+        PORTF;
+        IFS1bits.CNFIF=0;
+    }
+    else if(IFS1bits.CNGIF==1){
+        PORTG;
+        IFS1bits.CNGIF=0;
+    }
     
-    IFS1bits.CNDIF=0;
-    IFS1bits.CNFIF=0;
-    IFS1bits.CNGIF=0;
-
     keypadFlag = 1;
 }

@@ -52,13 +52,9 @@ void initKeypad(void){
     TRIS_COLUMN2 = INPUT;
     TRIS_COLUMN3 = INPUT; 
     
-    PULLUP1 = ENABLE;       //enable pull up resistors
-    PULLUP2 = ENABLE;
-    PULLUP3 = ENABLE;
-
-    CN1=ENABLE;
-    CN2=ENABLE;
-    CN3=ENABLE;
+    //PULLUP1 = ENABLE;       //enable pull up resistors
+    //PULLUP2 = ENABLE;
+    //PULLUP3 = ENABLE;
     
     CNCONDbits.ON=1;
     CNCONFbits.ON=1;
@@ -75,34 +71,29 @@ void initKeypad(void){
     CN1=ENABLE;
     CN2=ENABLE;
     CN3=ENABLE;
-    
-    CNCONDbits.ON=1;
-    CNCONFbits.ON=1;
-    CNCONGbits.ON=1;
-    
-    IFS1bits.CNDIF=0;
-    IFS1bits.CNFIF=0;
-    IFS1bits.CNGIF=0;
-    
+
     IEC1bits.CNDIE=1;
     IEC1bits.CNFIE=1;
     IEC1bits.CNGIE=1;
 
     IPC8bits.CNIP=7;
     
+    ODC1 = ENABLE;          //enable ODC 
+    ODC2 = ENABLE;
+    ODC3 = ENABLE;
+    ODC4 = ENABLE;
+    
+    LATODC1=OPEN;
+    LATODC2=OPEN;
+    LATODC3=OPEN;
+    LATODC4=OPEN;
     
     TRIS_ROW1=OUTPUT;
     TRIS_ROW2=OUTPUT;
     TRIS_ROW3=OUTPUT;
     TRIS_ROW4=OUTPUT;
     
-    ODC1 = ENABLE;          //enable ODC 
-    ODC2 = ENABLE;
-    ODC3 = ENABLE;
-    ODC4 = ENABLE;
     
-    
-
 }
 
 /* This function will be called AFTER you have determined that someone pressed
@@ -113,8 +104,12 @@ void initKeypad(void){
  */
 char scanKeypad(void){      //close 1 open the rest
     char key = -1;
-
-    while(1){
+     LATODC1=OPEN;
+     LATODC2=OPEN;
+     LATODC3=OPEN;
+     LATODC4=OPEN;
+    
+     while(1){
         LATODC1=CLOSED;
         LATODC2=OPEN;
         LATODC3=OPEN;
@@ -124,6 +119,8 @@ char scanKeypad(void){      //close 1 open the rest
 
         if(COLUMN1 == 0){
             key = '1';
+            //TRISDbits.TRISD0=0;
+            //LATDbits.LATD0=!LATDbits.LATD0;
             break;
         }
         else if(COLUMN2 == 0){
@@ -178,10 +175,14 @@ char scanKeypad(void){      //close 1 open the rest
 
         if(COLUMN1 == 0){
             key = '*';
+            //TRISDbits.TRISD1=0;
+            //LATDbits.LATD1=!LATDbits.LATD1;
             break;
         }
         else if(COLUMN2 == 0){
             key = '0';
+            //TRISDbits.TRISD1=0;
+            //LATDbits.LATD1=!LATDbits.LATD1;
             break;
         }
         else if(COLUMN3 == 0){
