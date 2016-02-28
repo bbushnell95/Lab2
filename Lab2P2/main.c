@@ -1,6 +1,7 @@
 
 #include <xc.h>
 #include <sys/attribs.h>
+#include <string.h>
 #include "lcd.h"
 #include "timer.h"
 #include "config.h"
@@ -32,7 +33,7 @@ int digitCount = 0;
 int passwordCount = 0;
 int matchFlag = 0;
 char* newPassword = "\0";     //is this how you initialize a blank string?
-char passwordArray [3][5];    //need to check how to make an array of strings
+char passwordArray [4][5];    //need to check how to make an array of strings
                               //should be a 4 element array of 5 characters each including \0
 char* buildString(void);
 int stringCompare(char* newString);
@@ -45,6 +46,8 @@ int main(void){
     initTimer2();
     initLCD();
     initKeypad();
+    
+    int i = 0;
     
     while(1){
         
@@ -65,7 +68,7 @@ int main(void){
                 break;
 
             case ValidateNew:
-                newPassword= buildString();
+                newPassword = buildString();
                 while(digitCount < 4){
                     if(newPassword[digitCount] == '#' || newPassword[digitCount] == '*'){
                         clearLCD();
@@ -83,7 +86,7 @@ int main(void){
                 if(passwordCount == 4){
                     passwordCount = 0;
                 }
-                passwordArray[passwordCount] = newPassword;
+                strcpy(passwordArray[passwordCount], newPassword);//passwordArray[passwordCount] = newPassword;
                 passwordCount++;
                 clearLCD();
                 moveCursorLCD(1,1);
@@ -93,9 +96,16 @@ int main(void){
                 break;
                 
             case ValidateExisting:
-                newPassword=buildString();
-                matchFlag=stringCompare(newPassword);
-                
+                newPassword = buildString();
+                //matchFlag = stringCompare(newPassword);
+                while(i < 4){
+                    if(strcmp(passwordArray[i], newPassword) == 0){
+                        // found a match
+                        matchFlag = 1;
+                        break;
+                    }
+                    i++;
+                }
                 if(matchFlag == 1){
                     clearLCD();
                     moveCursorLCD(1,1);
@@ -181,26 +191,47 @@ char* buildString (void){
 /*
  *This function is used to compare a newly entered string to the existing strings
  * in the array of strings being build above.
- */
-int stringCompare(char* newString){     //logic needs to be worked on..
-    int match = 1;
-    int arrayCounter = 0;
-    int elementCounter = 0;
-    char oldString = "\0";
-    
-    while(arrayCounter < 4)
-    {
-        oldString = passwordArray[arrayCounter];
-        while(elementCounter < 4){
-            if(newString[elementCounter] != oldString[elementCounter]){
-                match =0;
-                break;
-            }
-            elementCounter++;
-        }
-        arrayCounter++;
-        elementCounter = 0;
-    }
-    
-    return match;
-}
+// */
+//int stringCompare(char* newString){     //logic needs to be worked on..
+//    int match = 1;
+//    int arrayCounter = 0;
+//    int elementCounter = 0;
+//    char oldString = "\0";
+//    
+//    while(arrayCounter < 4)
+//    {
+//        oldString = passwordArray[arrayCounter];
+//        while(elementCounter < 4){
+//            if(newString[elementCounter] != oldString[elementCounter]){
+//                match =0;
+//                break;
+//            }
+//            elementCounter++;
+//        }
+//        arrayCounter++;
+//        elementCounter = 0;
+//    }
+//    
+//    return match;
+//}
+//
+//int strcmp(const char* string1, const char* string2 ){
+//    
+//    int match = 0;
+//    while(*string1 != '\0' && *string2 != '\0'){
+//        if(*string1++ != *string2++){
+//            //bad, break out of loop
+//            match = (int)(*string1) - (int)(*string2);
+//            break;
+//        }
+//    }
+//    
+//    return match;
+//}
+//
+//void strcpy(char *dest, const char* source){
+//    
+//    while(*dest != '\0'){
+//        *dest++ = *source++;
+//    }
+//}
