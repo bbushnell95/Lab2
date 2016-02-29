@@ -117,6 +117,7 @@ char scanKeypad(void){      //close 1 open the rest
         
         //enableODC(1);
 
+        delayMs(5);
         if(COLUMN1 == 0){
             key = '1';
             //TRISDbits.TRISD0=0;
@@ -136,7 +137,8 @@ char scanKeypad(void){      //close 1 open the rest
         LATODC2=CLOSED;
         LATODC3=OPEN;
         LATODC4=OPEN;
-
+       delayMs(5);
+        
         if(COLUMN1 == 0){
             key = '4';
             break;
@@ -149,12 +151,14 @@ char scanKeypad(void){      //close 1 open the rest
             key = '6';
             break;
         }
+        
 
         LATODC1=OPEN;
         LATODC2=OPEN;
         LATODC3=CLOSED;
         LATODC4=OPEN;
-
+       delayMs(5);
+        
         if(COLUMN1 == 0){
             key = '7';
             break;
@@ -173,6 +177,7 @@ char scanKeypad(void){      //close 1 open the rest
         LATODC3=OPEN;
         LATODC4=CLOSED;
 
+       delayMs(5);
         if(COLUMN1 == 0){
             key = '*';
             //TRISDbits.TRISD1=0;

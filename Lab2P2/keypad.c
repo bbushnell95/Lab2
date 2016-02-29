@@ -120,7 +120,7 @@ char scanKeypad(void){      //close 1 open the rest
         LATODC3=OPEN;
         LATODC4=OPEN;
         
-        //enableODC(1);
+        delayMs(5);
 
         if(COLUMN1 == 0){
             key = '1';
@@ -140,6 +140,7 @@ char scanKeypad(void){      //close 1 open the rest
         LATODC3=OPEN;
         LATODC4=OPEN;
 
+        delayMs(5);
         if(COLUMN1 == 0){
             key = '4';
             break;
@@ -157,6 +158,7 @@ char scanKeypad(void){      //close 1 open the rest
         LATODC2=OPEN;
         LATODC3=CLOSED;
         LATODC4=OPEN;
+        delayMs(5);
 
         if(COLUMN1 == 0){
             key = '7';
@@ -175,6 +177,7 @@ char scanKeypad(void){      //close 1 open the rest
         LATODC2=OPEN;
         LATODC3=OPEN;
         LATODC4=CLOSED;
+        delayMs(5);
 
         if(COLUMN1 == 0){
             key = '*';

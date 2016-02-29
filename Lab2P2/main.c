@@ -29,14 +29,16 @@ const char* invalid = "Invalid";
 
 int state = Enter;
 int firstStar = 0;            //used to detect when a user enters an '*' 
-int digitCount = 0;
 int passwordCount = 0;
 int matchFlag = 0;
 char* newPassword = "\0";     //is this how you initialize a blank string?
 char passwordArray [4][5];    //need to check how to make an array of strings
                               //should be a 4 element array of 5 characters each including \0
-char* buildString(void);
+int firstNum = 0;
+char* buildString();
 int stringCompare(char* newString);
+void printWhat(const char* string);
+int testPassword(char* newPassword);
 
 int main(void){
     
@@ -69,29 +71,15 @@ int main(void){
 
             case ValidateNew:
                 newPassword = buildString();
-                while(digitCount < 4){
-                    if(newPassword[digitCount] == '#' || newPassword[digitCount] == '*'){
-                        clearLCD();
-                        moveCursorLCD(1,1);
-                        printStringLCD(invalid);
-                        delayMs(2000);
-                        state = Enter;
-                        digitCount = 0;
-                        break;                          //this needs to leave the state not just the while loop
-                    }
-                    digitCount++;  
+                if(testPassword(newPassword) == 0){
+                    // no errors]
+                    printWhat(valid);
                 }
-                digitCount = 0;
+                else{
+                    // error in input - '*' or '#'
+                    printWhat(invalid);
+                }
                 
-                if(passwordCount == 4){
-                    passwordCount = 0;
-                }
-                strcpy(passwordArray[passwordCount], newPassword);//passwordArray[passwordCount] = newPassword;
-                passwordCount++;
-                clearLCD();
-                moveCursorLCD(1,1);
-                printStringLCD(valid);
-                delayMs(2000);
                 state = Enter;
                 break;
                 
@@ -106,6 +94,7 @@ int main(void){
                     }
                     i++;
                 }
+                i = 0;
                 if(matchFlag == 1){
                     clearLCD();
                     moveCursorLCD(1,1);
@@ -118,10 +107,8 @@ int main(void){
                     printStringLCD(bad);
                     delayMs(2000);
                 }
-                
                 state = Enter;
                 break;
-                
             case Wait:
                 if(keypadFlag == 1){
                 CN1 = OFF;
@@ -138,14 +125,19 @@ int main(void){
                         state = ProgramMode;
                     }
                 }
-                else{
+                else if(keystroke != '#'){
                     state = ValidateExisting;
+                    firstNum = keystroke;
                 }
                 CN1 = ON;
                 CN2 = ON;
                 CN3 = ON;
                 
-                }   
+                }
+                else{
+                    state = Enter;
+                    firstStar = 0;
+                }
                 break;
         }  
     }
@@ -164,14 +156,60 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
     keypadFlag = 1;
 }
 
+void printWhat(const char* string){
+    
+                    clearLCD();
+                    moveCursorLCD(1,1);
+                    printStringLCD(string);
+                    delayMs(2000);
+}
+
+
+int testPassword(char* newPassword){
+    
+    int digitCount = 0;
+    int exitCondition = 0;
+    
+    while(digitCount < 4){
+        if(newPassword[digitCount] == '#' || newPassword[digitCount] == '*'){
+            exitCondition = 1;
+            digitCount = 0;
+            break;                          //this needs to leave the state not just the while loop
+        }
+        digitCount++;  
+    }
+    digitCount = 0;
+                
+    if(passwordCount == 4){
+        passwordCount = 0;
+    }
+    strcpy(passwordArray[passwordCount], newPassword);
+    passwordCount++;
+    
+    return exitCondition;
+    
+}
+
 /*
  *This function is used to assemble a string of 4 characters from the keypad.
  * once it has assembled the characters into a string it will return
  */
 
-char* buildString (void){
-    int i = 0;
-    char* newString = "\0";
+
+
+char* buildString (){
+    int i;
+    char* newString = "";
+    
+    if(state == ValidateExisting){
+        // first number needs to be captured
+        newString[0] = firstNum;
+        i = 1; 
+    }
+    else if(state == ValidateNew){
+        // no first number to capture
+        i = 0;   
+    }
     
     while(i < 4){
         if(keypadFlag == 1){
@@ -188,50 +226,3 @@ char* buildString (void){
     }
     return newString;
 }
-/*
- *This function is used to compare a newly entered string to the existing strings
- * in the array of strings being build above.
-// */
-//int stringCompare(char* newString){     //logic needs to be worked on..
-//    int match = 1;
-//    int arrayCounter = 0;
-//    int elementCounter = 0;
-//    char oldString = "\0";
-//    
-//    while(arrayCounter < 4)
-//    {
-//        oldString = passwordArray[arrayCounter];
-//        while(elementCounter < 4){
-//            if(newString[elementCounter] != oldString[elementCounter]){
-//                match =0;
-//                break;
-//            }
-//            elementCounter++;
-//        }
-//        arrayCounter++;
-//        elementCounter = 0;
-//    }
-//    
-//    return match;
-//}
-//
-//int strcmp(const char* string1, const char* string2 ){
-//    
-//    int match = 0;
-//    while(*string1 != '\0' && *string2 != '\0'){
-//        if(*string1++ != *string2++){
-//            //bad, break out of loop
-//            match = (int)(*string1) - (int)(*string2);
-//            break;
-//        }
-//    }
-//    
-//    return match;
-//}
-//
-//void strcpy(char *dest, const char* source){
-//    
-//    while(*dest != '\0'){
-//        *dest++ = *source++;
-//    }
-//}
