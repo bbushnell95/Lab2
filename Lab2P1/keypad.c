@@ -6,10 +6,10 @@
 #define TRIS_COLUMN2 TRISFbits.TRISF1
 #define TRIS_COLUMN3 TRISDbits.TRISD12
 
-#define TRIS_ROW1 TRISGbits.TRISG1
-#define TRIS_ROW2 TRISFbits.TRISF0
-#define TRIS_ROW3 TRISDbits.TRISD13
-#define TRIS_ROW4 TRISDbits.TRISD7 
+#define TRIS_ROW1 TRISDbits.TRISD2 //TRISG1 // change to RD2
+#define TRIS_ROW2 TRISDbits.TRISD3 // // change to RD3
+#define TRIS_ROW3 TRISDbits.TRISD0   //D13 // change to RD0
+#define TRIS_ROW4 TRISDbits.TRISD1 //  D7 //// change to RD1
 
 #define OUTPUT 0
 #define INPUT 1
@@ -25,24 +25,24 @@
 #define CN2 CNENFbits.CNIEF1
 #define CN3 CNENDbits.CNIED12
 
-#define ROW1 PORTGbits.RG1
-#define ROW2 PORTFbits.RF0
-#define ROW3 PORTDbits.RD13
-#define ROW4 PORTDbits.RD7
+#define ROW1 PORTDbits.RD2 // pin 17
+#define ROW2 PORTDbits.RD3 // pin 18
+#define ROW3 PORTDbits.RD0 // pin 19
+#define ROW4 PORTDbits.RD1 // pin 20
 
 #define PULLUP1 CNPUGbits.CNPUG0
 #define PULLUP2 CNPUFbits.CNPUF1
 #define PULLUP3 CNPUDbits.CNPUD12
 
-#define ODC1 ODCGbits.ODCG1
-#define ODC2 ODCFbits.ODCF0
-#define ODC3 ODCDbits.ODCD13
-#define ODC4 ODCDbits.ODCD7
+#define ODC1 ODCDbits.ODCD2  //G1 // change to RD2
+#define ODC2 ODCDbits.ODCD3  //F0 // change to RD3
+#define ODC3 ODCDbits.ODCD0  //13 // change to RD0
+#define ODC4 ODCDbits.ODCD1//  D7 // change to RD1
 
-#define LATODC1 LATGbits.LATG1
-#define LATODC2 LATFbits.LATF0
-#define LATODC3 LATDbits.LATD13
-#define LATODC4 LATDbits.LATD7
+#define LATODC1 LATDbits.LATD2 //G1 // change to RD2
+#define LATODC2 LATDbits.LATD3 //F0 // change to RD3
+#define LATODC3 LATDbits.LATD0  // 13 // change to RD0
+#define LATODC4 LATDbits.LATD1   //D7 // change to RD1
 
 /* Initialize the rows as ODC outputs and the columns as inputs with pull-up
  * resistors. Don't forget about other considerations...
