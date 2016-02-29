@@ -28,6 +28,7 @@ int main(void){
 
     int pressCount = -1;
     moveCursorLCD(1,1);
+    keypadFlag = 1;
     while(1){
         if(keypadFlag == 1){
             CN1 = OFF;

@@ -50,7 +50,7 @@ int main(void){
     initKeypad();
     
     int i = 0;
-    
+    keypadFlag = 1;
     while(1){
         
         switch(state){
