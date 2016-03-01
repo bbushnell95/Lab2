@@ -41,6 +41,7 @@ char* buildString();
 int stringCompare(char* newString);
 void printWhat(const char* string);
 int testPassword(char* newPassword);
+int comparePassword(char* oldPass);
 
 int main(void){
     
@@ -89,7 +90,7 @@ int main(void){
                 newPassword = buildString();
                 //matchFlag = stringCompare(newPassword);
                 while(i < 4){
-                    if(strcmp(passwordArray[i], newPassword) == 0){
+                    if((comparePassword(passwordArray[i])) == 0){
                         // found a match
                         matchFlag = 1;
                         break;
@@ -166,7 +167,7 @@ void printWhat(const char* string){
                     clearLCD();
                     moveCursorLCD(1,1);
                     printStringLCD(string);
-                    delayMs(2000);
+                    delayMs(4000);
 }
 
 
@@ -188,8 +189,10 @@ int testPassword(char* newPassword){
     if(passwordCount == 4){
         passwordCount = 0;
     }
-    strcpy(passwordArray[passwordCount], newPassword);
-    passwordCount++;
+    if(exitCondition != 1){
+        strcpy(passwordArray[passwordCount], newPassword);
+        passwordCount++;
+    }
     
     return exitCondition;
     
@@ -231,4 +234,18 @@ char* buildString (){
         }
     }
     return newString;
+}
+
+//compare one password from the array with the new password
+int comparePassword(char* oldPass){
+    int i = 0;
+    int result = 0;
+    
+    for(i=0; i<4; ++i){
+        if (newPassword[i] != oldPass[i]){
+            result = 1;
+            break;
+        }
+    }
+    return result;
 }
