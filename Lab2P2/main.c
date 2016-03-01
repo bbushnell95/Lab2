@@ -27,12 +27,14 @@ const char* bad = "Bad";
 const char* valid = "Valid";
 const char* invalid = "Invalid";
 
+char newString[4] = "aaaa";
+
 int state = Enter;
 int firstStar = 0;            //used to detect when a user enters an '*' 
 int passwordCount = 0;
 int matchFlag = 0;
 char* newPassword = "\0";     //is this how you initialize a blank string?
-char passwordArray [4][5];    //need to check how to make an array of strings
+char passwordArray[4][5];    //need to check how to make an array of strings
                               //should be a 4 element array of 5 characters each including \0
 int firstNum = 0;
 char* buildString();
@@ -107,37 +109,40 @@ int main(void){
                     printStringLCD(bad);
                     delayMs(2000);
                 }
+                matchFlag = 0;
                 state = Enter;
                 break;
             case Wait:
                 if(keypadFlag == 1){
-                CN1 = OFF;
-                CN2 = OFF;
-                CN3 = OFF;
-                keypadFlag = 0;
-                keystroke = scanKeypad();
-                if(keystroke == '*'){
-                    if(firstStar == 0){
-                        firstStar = 1;
+                    CN1 = OFF;
+                    CN2 = OFF;
+                    CN3 = OFF;
+                    keypadFlag = 0;
+                    keystroke = scanKeypad();
+                    if(keystroke == '*'){
+                        printCharLCD(keystroke);
+                        if(firstStar == 0){
+                            firstStar = 1;
+                        }
+                        else{
+                            firstStar = 0;                  //will need to set this down in other places too
+                            state = ProgramMode;
+                        }
+                    }
+                    else if(keystroke != '#'){
+                        state = ValidateExisting;
+                        firstNum = keystroke;
                     }
                     else{
-                        firstStar = 0;                  //will need to set this down in other places too
-                        state = ProgramMode;
+                        state = Enter;
+                        firstStar = 0;
                     }
+
+                    CN1 = ON;
+                    CN2 = ON;
+                    CN3 = ON;
                 }
-                else if(keystroke != '#'){
-                    state = ValidateExisting;
-                    firstNum = keystroke;
-                }
-                CN1 = ON;
-                CN2 = ON;
-                CN3 = ON;
                 
-                }
-                else{
-                    state = Enter;
-                    firstStar = 0;
-                }
                 break;
         }  
     }
@@ -199,18 +204,18 @@ int testPassword(char* newPassword){
 
 char* buildString (){
     int i;
-    char* newString = "";
+    
     
     if(state == ValidateExisting){
         // first number needs to be captured
         newString[0] = firstNum;
+        printCharLCD(newString[0]);
         i = 1; 
     }
     else if(state == ValidateNew){
         // no first number to capture
         i = 0;   
     }
-    
     while(i < 4){
         if(keypadFlag == 1){
             CN1 = OFF;
@@ -218,6 +223,7 @@ char* buildString (){
             CN3 = OFF;
             keypadFlag = 0;
             newString[i]= scanKeypad();
+            printCharLCD(newString[i]);
             CN1 = ON;
             CN2 = ON;
             CN3 = ON; 
