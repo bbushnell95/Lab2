@@ -88,6 +88,7 @@ int main(void){
                 
             case ValidateExisting:
                 newPassword = buildString();
+                i = 0;
                 //matchFlag = stringCompare(newPassword);
                 while(i < 4){
                     if((comparePassword(passwordArray[i])) == 0){
@@ -99,16 +100,10 @@ int main(void){
                 }
                 i = 0;
                 if(matchFlag == 1){
-                    clearLCD();
-                    moveCursorLCD(1,1);
-                    printStringLCD(good);
-                    delayMs(2000);
+                    printWhat(good);
                 }
                 else{
-                    clearLCD();
-                    moveCursorLCD(1,1);
-                    printStringLCD(bad);
-                    delayMs(2000);
+                    printWhat(bad);
                 }
                 matchFlag = 0;
                 state = Enter;
@@ -167,7 +162,8 @@ void printWhat(const char* string){
                     clearLCD();
                     moveCursorLCD(1,1);
                     printStringLCD(string);
-                    delayMs(4000);
+                    delayMs(8000);
+                    delayMs(8000);
 }
 
 
@@ -187,7 +183,7 @@ int testPassword(char* newPassword){
     digitCount = 0;
                 
     if(passwordCount == 4){
-        passwordCount = 0;
+        passwordCount = 3;
     }
     if(exitCondition != 1){
         strcpy(passwordArray[passwordCount], newPassword);
